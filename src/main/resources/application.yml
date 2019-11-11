@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+gizwits:
+  snoti:
+    host: snoti.gizwits.com
+    port: 2017
+    automatic-confirmation: true
+    item-list:
+      - product-key: pk1
+        auth-id: auth-id-1
+        auth-secret: auth-secret-1
+        sub-key: sub-key-1
+      - product-key: pk2
+        auth-id: auth-id-2
+        auth-secret: auth-secret-2
+        sub-key: sub-key-2
