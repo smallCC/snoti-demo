@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,6 +46,20 @@ public class SnotiBootstrapService implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         taskExecutor.execute(this::startSnotiClient);
+    }
+
+    /**
+     * Ctrl boolean.
+     *
+     * @param productKey the product key
+     * @param mac        the mac
+     * @param did        the did
+     * @param attrs      the attrs
+     * @return the boolean
+     */
+    public boolean ctrl(String productKey, String mac, String did, Map<String, Object> attrs) {
+        log.info("发起设备控制. productKey[{}] mac[{}] did[{}] attrs[{}]", productKey, mac, did, attrs);
+        return this.client.control(productKey, mac, did, attrs);
     }
 
     private void startSnotiClient() {
