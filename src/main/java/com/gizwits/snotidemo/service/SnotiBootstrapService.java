@@ -7,6 +7,7 @@ import com.gizwits.noti.noticlient.bean.req.NotiReqPushEvents;
 import com.gizwits.noti.noticlient.bean.req.body.AuthorizationData;
 import com.gizwits.noti.noticlient.config.SnotiCallback;
 import com.gizwits.noti.noticlient.config.SnotiConfig;
+import com.gizwits.noti.noticlient.enums.ProtocolType;
 import com.gizwits.snotidemo.config.SnotiProperties;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
@@ -122,6 +123,7 @@ public class SnotiBootstrapService implements CommandLineRunner {
                 .map(it ->
                         new AuthorizationData()
                                 //监听所有推送事件
+                                .setProtocolType(ProtocolType.V2)
                                 .addEvents(NotiReqPushEvents.values())
                                 .setSubkey(it.getSubKey())
                                 .setAuth_id(it.getAuthId())
