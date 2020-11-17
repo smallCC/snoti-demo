@@ -3,7 +3,6 @@ package com.gizwits.snotidemo.controller;
 import com.gizwits.snotidemo.bean.dto.SnotiAttrsCtrlDTO;
 import com.gizwits.snotidemo.common.web.ApiResponse;
 import com.gizwits.snotidemo.service.SnotiBootstrapService;
-import com.google.common.base.Preconditions;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,8 @@ public class SnotiCtrlController {
 
     @PostMapping
     @ApiOperation(value = "控制设备-数据点", notes = "使用数据点控制设备")
-    public ApiResponse<String> attrsCtrl(@Valid @RequestBody SnotiAttrsCtrlDTO params) {
-        boolean ctrl = snotiBootstrapService.ctrl(params.getProductKey(), params.getMac(), params.getDid(), params.getAttrs());
-        Preconditions.checkArgument(ctrl, "下发控制失败");
-        return ApiResponse.ok();
+    public ApiResponse<Boolean> attrsCtrl(@Valid @RequestBody SnotiAttrsCtrlDTO params) {
+        boolean res = snotiBootstrapService.ctrl(params.getProductKey(), params.getMac(), params.getDid(), params.getAttrs());
+        return ApiResponse.ok(res);
     }
 }

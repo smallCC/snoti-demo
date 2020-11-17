@@ -5,7 +5,15 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+/**
+ * Snoti demo application.
+ *
+ * @author Jcxcc
+ * @since 1.0.0
+ */
+@EnableAsync
 @SpringBootApplication
 public class SnotiDemoApplication implements ApplicationRunner {
 

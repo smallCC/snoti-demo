@@ -3,11 +3,10 @@ package com.gizwits.snotidemo.service;
 import com.alibaba.fastjson.JSONObject;
 import com.gizwits.noti.noticlient.OhMyNotiClient;
 import com.gizwits.noti.noticlient.OhMyNotiClientImpl;
+import com.gizwits.noti.noticlient.bean.Credential;
 import com.gizwits.noti.noticlient.bean.req.NotiReqPushEvents;
-import com.gizwits.noti.noticlient.bean.req.body.AuthorizationData;
 import com.gizwits.noti.noticlient.config.SnotiCallback;
 import com.gizwits.noti.noticlient.config.SnotiConfig;
-import com.gizwits.noti.noticlient.enums.ProtocolType;
 import com.gizwits.snotidemo.config.SnotiProperties;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,10 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Snoti Bootstrap 服务
@@ -46,7 +45,7 @@ public class SnotiBootstrapService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        taskExecutor.execute(this::startSnotiClient);
+        startSnotiClient();
     }
 
     /**
@@ -68,7 +67,7 @@ public class SnotiBootstrapService implements CommandLineRunner {
 
         client =
                 new OhMyNotiClientImpl()
-                        .addLoginAuthorizes(getSnotiLoginCredential())
+                        .setCredentials(getSnotiLoginCredential())
                         .setCallback(getSnotiCallback())
                         .setSnotiConfig(getSnotiConfig());
 
@@ -89,6 +88,9 @@ public class SnotiBootstrapService implements CommandLineRunner {
     private SnotiConfig getSnotiConfig() {
         return new SnotiConfig()
                 .setAutomaticConfirmation(snotiProperties.getAutomaticConfirmation())
+                .setWithMetrics(true)
+                .setEnableCheckNoData(true)
+                .setNoDataWarningMinutes(1)
                 .setHost(snotiProperties.getHost())
                 .setPort(snotiProperties.getPort());
     }
@@ -107,28 +109,21 @@ public class SnotiBootstrapService implements CommandLineRunner {
                 log.warn("snoti客户端连接断开, 即将尝试重连...");
                 //TODO 通知
             }
-
-            @Override
-            public void reload(AuthorizationData... authorizationData) {
-                log.info("snoti重载登录信息[{}]...", Stream.of(authorizationData).map(AuthorizationData::toString).collect(Collectors.joining(",")));
-                //TODO 通知
-            }
         };
     }
 
-    private AuthorizationData[] getSnotiLoginCredential() {
+    private List<Credential> getSnotiLoginCredential() {
         List<SnotiProperties.Item> itemList = snotiProperties.getItemList();
         Preconditions.checkArgument(!CollectionUtils.isEmpty(itemList), "未配置snoti登陆信息, snoti初始化失败");
         return itemList.stream()
                 .map(it ->
-                        new AuthorizationData()
-                                //监听所有推送事件
-                                .setProtocolType(ProtocolType.V2)
-                                .addEvents(NotiReqPushEvents.values())
-                                .setSubkey(it.getSubKey())
-                                .setAuth_id(it.getAuthId())
-                                .setAuth_secret(it.getAuthSecret())
-                                .setProduct_key(it.getProductKey()))
-                .toArray(AuthorizationData[]::new);
+                        Credential.builder()
+                                .events(Arrays.asList(NotiReqPushEvents.values()))
+                                .subkey(it.getSubKey())
+                                .authId(it.getAuthId())
+                                .authSecret(it.getAuthSecret())
+                                .productKey(it.getProductKey())
+                                .build())
+                .collect(Collectors.toList());
     }
 }
