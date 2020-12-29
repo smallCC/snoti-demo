@@ -16,8 +16,9 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <snoti.version>1.9.1-RELEASE</snoti.version>
+        <snoti.version>1.9.2-RELEASE</snoti.version>
         <guava.version>27.0.1-jre</guava.version>
+        <lombok.version>1.18.16</lombok.version>
         <swagger.version>2.7.0</swagger.version>
     </properties>
 
@@ -44,6 +45,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>

@@ -11,7 +11,9 @@ import com.gizwits.snotidemo.config.SnotiProperties;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SnotiBootstrapService implements CommandLineRunner {
 
     @Autowired
