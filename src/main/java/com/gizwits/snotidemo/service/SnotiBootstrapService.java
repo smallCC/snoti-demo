@@ -92,8 +92,7 @@ public class SnotiBootstrapService implements CommandLineRunner {
         return new SnotiConfig()
                 .setAutomaticConfirmation(snotiProperties.getAutomaticConfirmation())
                 .setWithMetrics(true)
-                .setEnableCheckNoData(true)
-                .setNoDataWarningMinutes(1)
+                .setEnableCheckNoData(false)
                 .setHost(snotiProperties.getHost())
                 .setPort(snotiProperties.getPort());
     }
