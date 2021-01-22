@@ -35,6 +35,6 @@ public class DeviceGpsKvHandler implements PushEventHandler {
                 did = eventBody.getDid();
 
         //todo 添加对应当业务逻辑
-        log.info("设备上报 GPS 信息. productKey[{}] mac[{}] did[{}] latitude[{}] longitude[{}]", productKey, mac, did, latitude, longitude);
+        log.info("设备GPS事件. productKey[{}] mac[{}] did[{}] latitude[{}] longitude[{}]", productKey, mac, did, latitude, longitude);
     }
 }

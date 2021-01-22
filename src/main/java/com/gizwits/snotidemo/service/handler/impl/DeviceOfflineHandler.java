@@ -35,6 +35,6 @@ public class DeviceOfflineHandler implements PushEventHandler {
 
         //todo 添加对应当业务逻辑
 
-        log.info("设备下线. productKey[{}] mac[{}] did[{}] createdAt[{}]", productKey, mac, did, createdAt);
+        log.info("设备下线事件. productKey[{}] mac[{}] did[{}] createdAt[{}]", productKey, mac, did, createdAt);
     }
 }

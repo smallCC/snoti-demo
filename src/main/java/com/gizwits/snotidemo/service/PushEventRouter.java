@@ -6,7 +6,7 @@ import com.gizwits.noti.noticlient.bean.resp.NotiRespPushEvents;
 import com.gizwits.noti.noticlient.util.CommandUtils;
 import com.gizwits.snotidemo.config.SnotiProperties;
 import com.gizwits.snotidemo.service.handler.PushEventHandler;
-import com.gizwits.snotidemo.service.handler.impl.InvalidPushEventHandler;
+import com.gizwits.snotidemo.service.handler.impl.DefaultPushEventHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -35,7 +35,7 @@ public class PushEventRouter implements ApplicationContextAware {
     private Map<String, List<PushEventHandler>> routerMap;
 
     @Autowired
-    private InvalidPushEventHandler invalidPushEventHandler;
+    private DefaultPushEventHandler defaultPushEventHandler;
 
     @Autowired
     private SnotiProperties snotiProperties;
@@ -45,7 +45,7 @@ public class PushEventRouter implements ApplicationContextAware {
      * <p>
      * 1. 异步处理
      * 2. 过滤消息
-     * 3. 根据消息类型分发消息并处理, 如果不匹配则默认使用无效处理器进行处理{@link InvalidPushEventHandler#fire(JSONObject)}
+     * 3. 根据消息类型分发消息并处理, 如果不匹配则使用默认处理器进行处理{@link DefaultPushEventHandler#fire(JSONObject)}
      *
      * @param client  the client
      * @param message the json
@@ -55,7 +55,7 @@ public class PushEventRouter implements ApplicationContextAware {
         // 无法匹配时返回 invalid
         String pushEventCode = CommandUtils.getPushEventCode(message);
 
-        this.routerMap.getOrDefault(pushEventCode, Collections.singletonList(invalidPushEventHandler))
+        this.routerMap.getOrDefault(pushEventCode, Collections.singletonList(defaultPushEventHandler))
                 .forEach(it -> it.fire(message));
 
         /**
@@ -70,7 +70,7 @@ public class PushEventRouter implements ApplicationContextAware {
     /**
      * 查找  {@link NotiRespPushEvents} 对应的事件处理器
      * <p>
-     * {@link InvalidPushEventHandler} 无效事件处理器
+     * {@link DefaultPushEventHandler} 默认事件处理器
      * <p>
      * {@link com.gizwits.snotidemo.service.handler.impl.DeviceStatusKvHandler} 设备状态 kv 值处理器
      * <p>

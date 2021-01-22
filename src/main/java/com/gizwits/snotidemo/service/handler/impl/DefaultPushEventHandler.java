@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * 无效推送事件处理器
+ * 默认事件处理器
  * <p>
  * {@link NotiRespPushEvents}
  *
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class InvalidPushEventHandler implements PushEventHandler {
+public class DefaultPushEventHandler implements PushEventHandler {
 
     @Override
     public String getEventTypeCode() {
@@ -25,6 +25,6 @@ public class InvalidPushEventHandler implements PushEventHandler {
 
     @Override
     public void handle(JSONObject message) {
-        log.warn("推送事件不处理. 事件[{}]", message.toJSONString());
+        log.warn("没有声明处理器. 事件[{}]", message.toJSONString());
     }
 }
